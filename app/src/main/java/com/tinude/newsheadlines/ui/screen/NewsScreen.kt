@@ -59,7 +59,7 @@ fun ShowNewsHeadlines(viewModel: NewsHeadlineViewModel = viewModel()) {
             LazyColumn {
                 items(items = state.data){    news ->
                     NewsItem(news, onClick = {
-                        news.url.let { context.openUrlInApp2(it) }
+                        news.url.let { context.openUrlInApp(it) }
                     })
                 }
             }
