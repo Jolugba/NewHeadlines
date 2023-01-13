@@ -54,27 +54,28 @@ fun Context.openUrlInApp(url: String) {
         ex.localizedMessage
         toast("Please, ensure Google Chrome is installed on your device!")
     }
-    fun Context.openUrlInApp2(url: String?) {
-        var adjustedUrl = url
-        if (url.isNullOrEmpty()) {
-            return
-        }
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            adjustedUrl = "http://$url"
-        }
 
-        val uri = Uri.parse(adjustedUrl)
+}
+fun Context.openUrlInApp2(url: String?) {
+    var adjustedUrl = url
+    if (url.isNullOrEmpty()) {
+        return
+    }
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        adjustedUrl = "http://$url"
+    }
 
-        val intentBuilder = CustomTabsIntent.Builder()
-        intentBuilder.setToolbarColor(ContextCompat.getColor(this, R.color.black))
-        intentBuilder.setSecondaryToolbarColor(
-            ContextCompat.getColor(this, R.color.black)
-        )
-        try {
-            intentBuilder.build().launchUrl(this, uri)
-        } catch (exception: ActivityNotFoundException) {
-            exception.printStackTrace()
-            toast("You do not have any browser installed.")
-        }
+    val uri = Uri.parse(adjustedUrl)
+
+    val intentBuilder = CustomTabsIntent.Builder()
+    intentBuilder.setToolbarColor(ContextCompat.getColor(this, R.color.black))
+    intentBuilder.setSecondaryToolbarColor(
+        ContextCompat.getColor(this, R.color.black)
+    )
+    try {
+        intentBuilder.build().launchUrl(this, uri)
+    } catch (exception: ActivityNotFoundException) {
+        exception.printStackTrace()
+        toast("You do not have any browser installed.")
     }
 }

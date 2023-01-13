@@ -26,6 +26,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.tinude.newsheadlines.network.response.Article
 import com.tinude.newsheadlines.ui.viewmodel.NewsHeadlineViewModel
 import com.tinude.newsheadlines.util.openUrlInApp
+import com.tinude.newsheadlines.util.openUrlInApp2
 import com.tinude.newsheadlines.util.toast
 
 @Composable
@@ -56,9 +57,9 @@ fun ShowNewsHeadlines(viewModel: NewsHeadlineViewModel = viewModel()) {
 
         is NewsHeadlineViewModel.NewsState.Success -> {
             LazyColumn {
-                items(items = state.data){               news ->
+                items(items = state.data){    news ->
                     NewsItem(news, onClick = {
-                        news.url.let { context.openUrlInApp(it) }
+                        news.url.let { context.openUrlInApp2(it) }
                     })
                 }
             }
