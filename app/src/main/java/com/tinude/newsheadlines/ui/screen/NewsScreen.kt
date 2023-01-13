@@ -110,7 +110,7 @@ fun NewsItem(news: Article, onClick: () -> Unit) {
         ) {
             Text(
                 text = news.description?:"",
-                fontSize = 1.4.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 maxLines = 2,

@@ -31,7 +31,7 @@ class NewsHeadlineViewModel(application: Application) : AndroidViewModel(applica
                 when (val response = repository.fetchNews()) {
                     is ResultWrapper.Success -> {
                         val r = response.value
-                        if (r.isEmpty() == true) {
+                        if (r.isEmpty()) {
                             _uiState.value=NewsState.Success(emptyList())
                         } else {
                             _uiState.value=NewsState.Success(r)

@@ -2,6 +2,7 @@ package com.tinude.newsheadlines.util
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import com.tinude.newsheadlines.R
 
 /**
  * Extensions for Contexts
@@ -51,5 +53,28 @@ fun Context.openUrlInApp(url: String) {
     } catch (ex: Exception) {
         ex.localizedMessage
         toast("Please, ensure Google Chrome is installed on your device!")
+    }
+    fun Context.openUrlInApp2(url: String?) {
+        var adjustedUrl = url
+        if (url.isNullOrEmpty()) {
+            return
+        }
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            adjustedUrl = "http://$url"
+        }
+
+        val uri = Uri.parse(adjustedUrl)
+
+        val intentBuilder = CustomTabsIntent.Builder()
+        intentBuilder.setToolbarColor(ContextCompat.getColor(this, R.color.black))
+        intentBuilder.setSecondaryToolbarColor(
+            ContextCompat.getColor(this, R.color.black)
+        )
+        try {
+            intentBuilder.build().launchUrl(this, uri)
+        } catch (exception: ActivityNotFoundException) {
+            exception.printStackTrace()
+            toast("You do not have any browser installed.")
+        }
     }
 }
