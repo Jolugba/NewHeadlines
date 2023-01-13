@@ -1,13 +1,12 @@
 package com.tinude.newsheadlines.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -17,6 +16,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,13 +24,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.tinude.newsheadlines.network.response.Article
+import com.tinude.newsheadlines.ui.theme.NewsHeadlinesTheme
 import com.tinude.newsheadlines.ui.viewmodel.NewsHeadlineViewModel
 import com.tinude.newsheadlines.util.openUrlInApp
-import com.tinude.newsheadlines.util.openUrlInApp2
 import com.tinude.newsheadlines.util.toast
 
 @Composable
-fun ShowNewsHeadlines(viewModel: NewsHeadlineViewModel = viewModel()) {
+fun ShowNewsHeadlines(modifier: Modifier = Modifier,viewModel: NewsHeadlineViewModel = viewModel()) {
 
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -39,13 +39,13 @@ fun ShowNewsHeadlines(viewModel: NewsHeadlineViewModel = viewModel()) {
         is NewsHeadlineViewModel.NewsState.ERROR -> {
             context.toast(state.message)
             Column(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = CenterHorizontally
                     ) {
                         Button(
                             onClick = { viewModel.fetchStates() },
-                            modifier = Modifier
+                            modifier = modifier
                         ) {
                             Text(
                                 text = "Retry"
@@ -86,8 +86,8 @@ fun NewsItem(news: Article, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .padding(bottom = 8.dp)
+            .padding(horizontal = 4.dp)
+            .padding(bottom = 4.dp)
             .height(IntrinsicSize.Min)
             .clickable(
                 onClick = onClick
@@ -127,9 +127,36 @@ fun NewsItem(news: Article, onClick: () -> Unit) {
         }
     }
 }
+@Composable
+fun ShowAppBar(){
+    SmallTopAppBar(title = { Text(text = "NewsFeeds", fontWeight = FontWeight.Bold) },
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Black,
+            titleContentColor = Color.White))
+}
+@Composable
+fun ShowText(modifier: Modifier=Modifier){
+    Column(modifier.background(Color.Black).fillMaxWidth(),
+        horizontalAlignment = CenterHorizontally) {
+        Text(text = "Top News", fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center, color = Color.White)
+    }
+
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ShowFullScreen(modifier:Modifier=Modifier){
+   NewsHeadlinesTheme{
+        Scaffold(
+           topBar = { ShowAppBar() }
+        ) { padding ->
+            ShowText(modifier.padding(padding))
+            ShowNewsHeadlines()
+        }
+    }
+}
 @Preview(showBackground = true)
 @Composable
 fun show(){
-    NewsItem(Article(author = "list", content = "jjjj", urlToImage = ""), onClick = {  print( "Clicked!")})
+  ShowText()
 }
 

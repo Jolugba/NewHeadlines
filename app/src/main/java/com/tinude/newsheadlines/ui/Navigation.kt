@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.tinude.newsheadlines.ui.AppDestinations.NEWS_LIST_ROUTE
+import com.tinude.newsheadlines.ui.screen.ShowFullScreen
 import com.tinude.newsheadlines.ui.screen.ShowNewsHeadlines
 
 
@@ -19,7 +20,7 @@ fun NewsApp() {
     NavHost(navController = navController, startDestination = NEWS_LIST_ROUTE) {
 
         composable(route = NEWS_LIST_ROUTE) {
-           ShowNewsHeadlines()
+           ShowFullScreen()
         }
 
     }
