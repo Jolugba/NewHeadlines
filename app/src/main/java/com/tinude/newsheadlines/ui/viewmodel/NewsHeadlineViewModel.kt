@@ -1,40 +1,41 @@
 package com.tinude.newsheadlines.ui.viewmodel
 
-import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModel
 import com.tinude.newsheadlines.HeadlineRepository
 import com.tinude.newsheadlines.network.ResultWrapper
 import com.tinude.newsheadlines.network.response.Article
 import com.tinude.newsheadlines.util.parseError
 import com.tinude.newsheadlines.util.runIO
-import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class NewsHeadlineViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class NewsHeadlineViewModel @Inject constructor(
+    private val repository: HeadlineRepository
+) : ViewModel() {
 
-    private val repository = HeadlineRepository(application)
     private val _uiState = mutableStateOf<NewsState>(NewsState.LOADING(true))
     val uiState: State<NewsState> = _uiState
 
 
     init {
-        viewModelScope.launch {
-            fetchStates()
+      runIO {
+            fetchNews()
         }
     }
 
-    fun fetchStates() {
+    fun fetchNews() {
         try {
             runIO {
                 when (val response = repository.fetchNews()) {
                     is ResultWrapper.Success -> {
                         val r = response.value
                         if (r.isEmpty()) {
-                            _uiState.value=NewsState.Success(emptyList())
+                            _uiState.value = NewsState.Success(emptyList())
                         } else {
-                            _uiState.value=NewsState.Success(r)
+                            _uiState.value = NewsState.Success(r)
                         }
                     }
                 }
@@ -46,10 +47,12 @@ class NewsHeadlineViewModel(application: Application) : AndroidViewModel(applica
             }
         }
     }
+
     sealed class NewsState {
         data class LOADING(val loading: Boolean = false) : NewsState()
         class Success(val data: List<Article>) : NewsState()
-        class ERROR( val message: String) :  NewsState()
+        class ERROR(val message: String) : NewsState()
 
-    }}
+    }
+}
 

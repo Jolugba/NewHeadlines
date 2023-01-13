@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.tinude.newsheadlines.network.response.Article
 import com.tinude.newsheadlines.ui.theme.NewsHeadlinesTheme
@@ -30,7 +30,8 @@ import com.tinude.newsheadlines.util.openUrlInApp
 import com.tinude.newsheadlines.util.toast
 
 @Composable
-fun ShowNewsHeadlines(modifier: Modifier = Modifier,viewModel: NewsHeadlineViewModel = viewModel()) {
+fun ShowNewsHeadlines(modifier: Modifier = Modifier,
+                      viewModel: NewsHeadlineViewModel = hiltViewModel()) {
 
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -44,7 +45,7 @@ fun ShowNewsHeadlines(modifier: Modifier = Modifier,viewModel: NewsHeadlineViewM
                         horizontalAlignment = CenterHorizontally
                     ) {
                         Button(
-                            onClick = { viewModel.fetchStates() },
+                            onClick = { viewModel.fetchNews() },
                             modifier = modifier
                         ) {
                             Text(
@@ -149,8 +150,10 @@ fun ShowFullScreen(modifier:Modifier=Modifier){
         Scaffold(
            topBar = { ShowAppBar() }
         ) { padding ->
-            ShowText(modifier.padding(padding))
-            ShowNewsHeadlines()
+            Column(modifier.padding(padding)) {
+                ShowText()
+                ShowNewsHeadlines()
+            }
         }
     }
 }
