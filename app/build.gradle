@@ -22,10 +22,6 @@ android {
             useSupportLibrary true
         }
 
-        def localProperties = new Properties()
-        localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-        buildConfigField "String", "API_KEY_NEWS",localProperties['keyApiNews']
-        buildConfigField "String", "BASE_URL",localProperties['baseUrl']
 
     }
 
