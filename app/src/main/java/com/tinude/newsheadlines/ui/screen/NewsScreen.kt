@@ -32,7 +32,6 @@ import com.tinude.newsheadlines.util.toast
 @Composable
 fun ShowNewsHeadlines(modifier: Modifier = Modifier,
                       viewModel: NewsHeadlineViewModel = hiltViewModel()) {
-
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
